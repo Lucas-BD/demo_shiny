@@ -6,7 +6,7 @@ authors = ["Lucas Barbosa Defanti <lucasbdefanti@gmail.com>"]
 readme = "README.md"
 
 [tool.poetry.dependencies]
-python = "^3.12"
+python = ">=3.12,<3.13"
 pandas = "^2.2.2"
 shiny = "^1.0.0"
 matplotlib = "^3.9.1"
