@@ -10,20 +10,26 @@ import nest_asyncio
 nest_asyncio.apply()
 
 app_ui = ui.page_fluid(
-    ui.input_dark_mode(),
-    ui.input_action_button("stop", "Stop app", class_="btn-danger"),
-    ui.card(
-        ui.input_file("file_input", "Input", accept=[".xlsx"], multiple=False),
-        ui.input_action_button("re_gen", "Random"),
-        ui.download_button("download", "Download xlsx"),
+    ui.layout_columns(
+        ui.input_dark_mode(),
+        ui.card(ui.input_action_button("stop", "Stop app", class_="btn-danger")),
+        col_widths=(10, 2),
     ),
-
+    ui.layout_column_wrap(
+        ui.card(ui.input_file("file_input", "Input", accept=[".xlsx"], multiple=False)),
+        ui.card(""),
+        ui.card(
+            ui.input_action_button("re_gen", "Random"),
+            ui.download_button("download", "Download xlsx"),
+            width = 1 / 3
+        )
+    ),
     ui.card(
         ui.output_data_frame("df_render"),
-    ),
-    ui.card(
-        ui.output_data_frame("df_file"),
-    )
+        ),
+        ui.card(
+            ui.output_data_frame("df_file"),
+            )
 )
 
 def server(input: Inputs, output: Outputs, session: Session):
