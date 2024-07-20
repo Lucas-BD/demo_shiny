@@ -1,5 +1,7 @@
 from shiny import App, Inputs, Outputs, Session, render, ui, run_app, reactive
 from shiny.types import FileInfo
+import os
+import signal
 import io
 import pandas as pd
 import numpy as np
@@ -9,6 +11,7 @@ nest_asyncio.apply()
 
 app_ui = ui.page_fluid(
     ui.input_dark_mode(),
+    ui.input_action_button("stop", "Stop app", class_="btn-danger"),
     ui.card(
         ui.input_file("file_input", "Input", accept=[".xlsx"], multiple=False),
         ui.input_action_button("re_gen", "Random"),
@@ -59,6 +62,12 @@ def server(input: Inputs, output: Outputs, session: Session):
         if df_input.empty:
             return pd.DataFrame()
         return render.DataTable(df_input)
+    
+    @reactive.Effect
+    @reactive.event(input.stop, ignore_none=True)
+    async def _():
+        await session.app.stop()
+        os.kill(os.getpid(), signal.SIGTERM)
 
 app = App(app_ui, server)
 
