@@ -73,3 +73,5 @@ def server(input: Inputs, output: Outputs, session: Session):
         os.kill(os.getpid(), signal.SIGTERM)
 
 app = App(app_ui, server)
+
+run_app(app=app, launch_browser=True)
