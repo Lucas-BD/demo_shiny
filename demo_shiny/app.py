@@ -5,9 +5,6 @@ import signal
 import io
 import pandas as pd
 import numpy as np
-import nest_asyncio
-
-nest_asyncio.apply()
 
 app_ui = ui.page_fluid(
     ui.layout_columns(
@@ -76,5 +73,3 @@ def server(input: Inputs, output: Outputs, session: Session):
         os.kill(os.getpid(), signal.SIGTERM)
 
 app = App(app_ui, server)
-
-run_app(launch_browser=True)
