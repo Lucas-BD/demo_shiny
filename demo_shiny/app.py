@@ -1,5 +1,6 @@
 from shiny import App, Inputs, Outputs, Session, render, ui, run_app, reactive
 from shiny.types import FileInfo
+from datetime import date
 import os
 import signal
 import io
@@ -14,7 +15,9 @@ app_ui = ui.page_fluid(
     ),
     ui.layout_column_wrap(
         ui.card(ui.input_file("file_input", "Input", accept=[".xlsx"], multiple=False)),
-        ui.card(""),
+        ui.card(
+            ui.input_date_range("daterange", "Janela:"),
+            ui.output_text("daterep")),
         ui.card(
             ui.input_action_button("re_gen", "Random"),
             ui.download_button("download", "Download xlsx"),
@@ -30,6 +33,10 @@ app_ui = ui.page_fluid(
 )
 
 def server(input: Inputs, output: Outputs, session: Session):
+    @render.text
+    def daterep():
+        return f"{input.daterange()[0]} até {input.daterange()[1]}"
+    
     @reactive.calc
     def parse_file():
         file: list[FileInfo] | None = input.file_input()
@@ -74,4 +81,4 @@ def server(input: Inputs, output: Outputs, session: Session):
 
 app = App(app_ui, server)
 
-run_app(app=app, launch_browser=True)
+run_app(app=app)
